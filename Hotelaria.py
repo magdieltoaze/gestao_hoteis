@@ -32,7 +32,7 @@ while resp != '0':
         if resp2 == '1':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======         Cadastrar Hóspede       ======")
+            print("======        Cadastrar Hóspede       ======")
             print("============================================")
             nome = input("##### Nome do hóspede: ")
             cpf = input("##### CPF: ")
@@ -43,17 +43,17 @@ while resp != '0':
         elif resp2 == '2':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======       Exibir Dados do Hóspede   ======")
+            print("======      Exibir Dados do Hóspede   ======")
             print("============================================")
             cpf = input("##### Digite o CPF do hóspede para busca: ")
-            print(f"\n##### CPF: {cpf}")
+            print(f"\n ##### CPF: {cpf}")
             print("##### Nome: Maria do Socorro")
             print("##### Telefone: (84) 99999-9999")
             
         elif resp2 == '3':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======       Alterar Dados do Hóspede  ======")
+            print("======      Alterar Dados do Hóspede  ======")
             print("============================================")
             cpf = input("##### Digite o CPF do hóspede: ")
             print("\n Dados atualizados com sucesso!")
@@ -61,12 +61,12 @@ while resp != '0':
         elif resp2 == '4':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======         Excluir Hóspede         ======")
+            print("======        Excluir Hóspede         ======")
             print("============================================")
             cpf = input("##### Digite o CPF do hóspede para excluir: ")
             print("\n Hóspede removido do sistema!")
             
-        input("\nTecle <ENTER> para continuar...")
+        input("\n Tecle <ENTER> para continuar...")
 
     elif resp == '2':
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -83,7 +83,7 @@ while resp != '0':
         if resp2 == '1':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======        Cadastrar Novo Quarto    ======")
+            print("======       Cadastrar Novo Quarto    ======")
             print("============================================")
             num = input("##### Número do Quarto: ")
             tipo = input("##### Tipo (Solteiro/Casal/Luxo): ")
@@ -92,7 +92,7 @@ while resp != '0':
         elif resp2 == '2':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======     Disponibilidade de Quartos  ======")
+            print("======    Disponibilidade de Quartos  ======")
             print("============================================")
             print("##### Quarto 101 - [Disponível] - R$ 150,00")
             print("##### Quarto 102 - [Ocupado]    - R$ 250,00")
@@ -101,13 +101,13 @@ while resp != '0':
         elif resp2 == '3':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======      Alterar Preço da Diária    ======")
+            print("======     Alterar Preço da Diária    ======")
             print("============================================")
             num = input("##### Número do Quarto: ")
             preco = input("##### Novo valor da diária: R$ ")
-            print("\n SIMULAÇÃO: Preço atualizado!")
+            print("\n Preço atualizado!")
             
-        input("\nTecle <ENTER> para continuar...")
+        input("\n Tecle <ENTER> para continuar...")
 
     elif resp == '3':
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -134,28 +134,28 @@ while resp != '0':
         elif resp2 == '2':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======         Realizar Check-out      ======")
+            print("======        Realizar Check-out      ======")
             print("============================================")
             quarto = input("##### Número do Quarto fechando conta: ")
-            print("\n##### Consumo extra lançado: R$ 45,00")
+            print("\n ##### Consumo extra lançado: R$ 45,00")
             print("##### Total da estadia: R$ 345,00")
             print("\n Pagamento efetuado e quarto liberado!")
             
         elif resp2 == '3':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======      Registrar Consumo/Serviços ======")
+            print("======   Registrar Consumo/Serviços   ======")
             print("============================================")
             quarto = input("##### Número do Quarto: ")
             item = input("##### Item consumido (Serviço): ")
-            print("\n\tSIMULAÇÃO: Valor adicionado à conta do quarto!")
+            print("\n Valor adicionado à conta do quarto!")
             
-        input("\nTecle <ENTER> para continuar...")
+        input("\n Tecle <ENTER> para continuar...")
 
     elif resp == '4':
         os.system('cls' if os.name == 'nt' else 'clear')
         print("============================================")
-        print("======         Módulo Relatórios       ======")
+        print("======        Módulo Relatórios       ======")
         print("============================================")
         print("----- 1 - Lista Geral de Hóspedes      -----")
         print("----- 2 - Relatório Financeiro         -----")
@@ -166,7 +166,7 @@ while resp != '0':
         if resp2 == '1':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======       Lista Geral de Hóspedes   ======")
+            print("======      Lista Geral de Hóspedes   ======")
             print("============================================")
             print("##### 1. Maria do Socorro   - CPF: 111.111.111-11")
             print("##### 2. Sansão Toscano  - CPF: 222.222.222-22")
@@ -174,12 +174,12 @@ while resp != '0':
         elif resp2 == '2':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======       Relatório Financeiro      ======")
+            print("======      Relatório Financeiro      ======")
             print("============================================")
             print("##### Taxa de Ocupação Atual: 65%")
             print("##### Faturamento Estimado do Mês: R$ 12.450,00")
             
-        input("\nTecle <ENTER> para continuar...")
+        input("\n Tecle <ENTER> para continuar...")
 
     elif resp == '5':
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -187,14 +187,14 @@ while resp != '0':
         print("======            Informações         ======")
         print("============================================")
         print("##### Sistema de Gestão para Hotéis e Pousadas")
-        print("##### Desenvolvido para a Disciplina de Programação")
+        print("##### Desenvolvido para a Disciplina de Algorítmos e Lógica de Programação, sob orientação do Professor Flavius Gorgônio)
         print("#####")
         print("##### Autor: Magdiel Toscano")
         print("============================================")
-        input("\nTecle <ENTER> para continuar...")
+        input("\n Tecle <ENTER> para continuar...")
 
     elif resp == '0':
-        print("\nVocê encerrou o programa. Até logo!")
+        print("\n Você encerrou o programa. Até logo!")
     else:
-        print("\nOpção inválida! Tente novamente.")
-        input("\nTecle <ENTER> para continuar...")
+        print("\n Opção inválida! Tente novamente.")
+        input("\n Tecle <ENTER> para continuar...")

@@ -47,7 +47,7 @@ while resp != '0':
             print("============================================")
             cpf = input("##### Digite o CPF do hóspede para busca: ")
             print(f"\n##### CPF: {cpf}")
-            print("##### Nome: João da Silva (Simulação)")
+            print("##### Nome: Maria do Socorro")
             print("##### Telefone: (84) 99999-9999")
             
         elif resp2 == '3':
@@ -147,7 +147,7 @@ while resp != '0':
             print("======      Registrar Consumo/Serviços ======")
             print("============================================")
             quarto = input("##### Número do Quarto: ")
-            item = input("##### Item consumido (Frigobar/Serviço): ")
+            item = input("##### Item consumido (Serviço): ")
             print("\n\tSIMULAÇÃO: Valor adicionado à conta do quarto!")
             
         input("\nTecle <ENTER> para continuar...")

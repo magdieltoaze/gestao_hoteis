@@ -92,7 +92,7 @@ while resp != '0':
         elif resp2 == '2':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======    Disponibilidade de Quarto  ======")
+            print("======    Disponibilidade de Quartos  ======")
             print("============================================")
             print("##### Quarto 101 - [Disponível] - R$ 150,00")
             print("##### Quarto 102 - [Ocupado]    - R$ 250,00")

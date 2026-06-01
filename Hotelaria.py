@@ -92,7 +92,7 @@ while resp != '0':
         elif resp2 == '2':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======    Disponibilidade de Quartos  ======")
+            print("======    Disponibilidade de Quarto  ======")
             print("============================================")
             print("##### Quarto 101 - [Disponível] - R$ 150,00")
             print("##### Quarto 102 - [Ocupado]    - R$ 250,00")
@@ -101,7 +101,7 @@ while resp != '0':
         elif resp2 == '3':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======     Alterar Preço da Diária    ======")
+            print("======     Alterar Preço da Diária    =====")
             print("============================================")
             num = input("##### Número do Quarto: ")
             preco = input("##### Novo valor da diária: R$ ")
@@ -124,7 +124,7 @@ while resp != '0':
         if resp2 == '1':
             os.system('cls' if os.name == 'nt' else 'clear')
             print("============================================")
-            print("======          Realizar Check-in      ======")
+            print("======         Realizar Check-in      ======")
             print("============================================")
             cpf = input("##### CPF do Hóspede: ")
             quarto = input("##### Número do Quarto Escolhido: ")

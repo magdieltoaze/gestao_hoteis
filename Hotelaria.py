@@ -1,4 +1,5 @@
 import os
+import pickle
 from datetime import datetime
 
 # CPF como registro principal: [Nome, Email, Telefone]
@@ -23,6 +24,27 @@ registro = {
     1001: ['22222222222', '102', datetime(2026, 6, 5, 14, 30), '', 45.50, ''],
     1002: ['11111111111', '104', datetime(2026, 6, 7, 9, 15), '', 0.0, '']
 }
+
+# RECUPERAR DADOS
+
+try:
+    # 1. Tenta abrir o arquivo para puxar os dados salvos
+    arq_hotel = open('dados_hotel.dat', 'rb')
+    dados_salvos = pickle.load(arq_hotel)
+    
+    # Se encontrou o arquivo, sobrepõe
+    hospedes = dados_salvos[0]
+    quartos = dados_salvos[1]
+    registro = dados_salvos[2]
+    chave = dados_salvos[3]
+    arq_hotel.close()
+except:
+    # 2. Se deu erro grava os dados de cima para criar o arquivo novo
+    arq_hotel = open('dados_hotel.dat', 'wb')
+    info_hotel = [hospedes, quartos, registro, chave]
+    pickle.dump(info_hotel, arq_hotel)
+    arq_hotel.close()
+
 
 resp = ''
 while resp != '0': 
@@ -71,6 +93,12 @@ while resp != '0':
                     numero = input("# Telefone: ")
                     hospedes[cpf] = [nome, email, numero]
                     print("\n Hóspede cadastrado com sucesso!")
+                    
+                    # [SALVAMENTO AUTOMÁTICO]
+                    arq_hotel = open('dados_hotel.dat', 'wb')
+                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                    arq_hotel.close()
+                        
                 input("\n Tecle <ENTER> para continuar...")
                 
             elif resp2 == '2':
@@ -102,7 +130,12 @@ while resp != '0':
                     email = input("# Digite o Email: ")
                     numero = input("# Digite o Telefone: ")
                     hospedes[cpf] = [nome, email, numero]
-                    print("\n Dados atualizados com sucesso!")
+                    print("\n Dados updated com sucesso!")
+                    
+                    # [SALVAMENTO AUTOMÁTICO]
+                    arq_hotel = open('dados_hotel.dat', 'wb')
+                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                    arq_hotel.close()
                 else:
                     print("\n Hóspede não encontrado!")
                 input("\n Tecle <ENTER> para continuar...")
@@ -117,6 +150,11 @@ while resp != '0':
                 if cpf in hospedes:
                     del hospedes[cpf] 
                     print("\n Hóspede removido do sistema!")
+                    
+                    # SALVAMENTO AUTOMÁTICO
+                    arq_hotel = open('dados_hotel.dat', 'wb')
+                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                    arq_hotel.close()
                 else:
                     print("\n Hóspede não encontrado!")
                 input("\n Tecle <ENTER> para continuar...")
@@ -151,6 +189,11 @@ while resp != '0':
                     status = input("# Disponibilidade (Disponivel/Indisponivel/Manutencao): ")
                     quartos[num_quarto] = [tipo, preco, status]
                     print("\n Quarto cadastrado com sucesso!")
+                    
+                    # SALVAMENTO AUTOMÁTICO
+                    arq_hotel = open('dados_hotel.dat', 'wb')
+                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                    arq_hotel.close()
                 input("\n Tecle <ENTER> para continuar...")
                         
             elif resp2 == '2':
@@ -181,7 +224,12 @@ while resp != '0':
                     print(f" Preço atual da diária: R$ {quartos[num_quarto][1]}")
                     novo_preco = input("\n# Digite o NOVO preço da diária: R$ ")
                     quartos[num_quarto][1] = novo_preco
-                    print("\n Preço da diária atualizado com sucesso!")
+                    print("\n Preço da diária updated com sucesso!")
+                    
+                    # SALVAMENTO AUTOMÁTICO
+                    arq_hotel = open('dados_hotel.dat', 'wb')
+                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                    arq_hotel.close()
                 else:
                     print("\n Quarto não encontrado!")
                 input("\n Tecle <ENTER> para continuar...")
@@ -221,6 +269,11 @@ while resp != '0':
                         print(f" Entrada registrada às: {data_entrada.strftime('%d/%m/%Y %H:%M')}")
                         
                         chave += 1 
+                        
+                        # SALVAMENTO AUTOMÁTICO
+                        arq_hotel = open('dados_hotel.dat', 'wb')
+                        pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                        arq_hotel.close()
                     else:
                         print("\n Erro: Esse quarto já está ocupado ou em manutenção.")
                 else:
@@ -230,7 +283,7 @@ while resp != '0':
             elif resp2 == '2':
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print("============================================")
-                print("======       Realizar Check-out       ======")
+                print("======        Realizar Check-out      ======")
                 print("============================================")
                 num_quarto = input("# Número do Quarto para fechar conta: ")
                 
@@ -268,6 +321,11 @@ while resp != '0':
                         dados[5] = total_geral
                         
                         print("\n Conta fechada, quarto liberado e histórico salvo com sucesso!")
+                        
+                        # SALVAMENTO AUTOMÁTICO
+                        arq_hotel = open('dados_hotel.dat', 'wb')
+                        pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                        arq_hotel.close()
                         break
                 if encontrou == False:
                     print("\n Erro: Quarto não encontrado ou não possui hospedagem ativa!")
@@ -296,6 +354,11 @@ while resp != '0':
                         dados[4] += valor_consumo
                         
                         print(f"\n Consumo registrado! Novo saldo: R$ {dados[4]:.2f}")
+                        
+                        # SALVAMENTO AUTOMÁTICO
+                        arq_hotel = open('dados_hotel.dat', 'wb')
+                        pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+                        arq_hotel.close()
                         break
                 
                 if encontrou == False:

@@ -4,8 +4,8 @@ from datetime import datetime
 
 # CPF como registro principal: [Nome, Email, Telefone]
 hospedes = {
-    '11111111111': ['Maria do Socorro', 'maria@email.com', '(84) 99999-9999'],
-    '22222222222': ['Sansão Toscano', 'sansao@email.com', '(84) 88888-8888']
+    '11111111111': ['Maria do Socorro', 'maria@email.com', '84999999999'],
+    '22222222222': ['Sansão Toscano', 'sansao@email.com', '84888888888']
 }
 
 # Numero do quarto como registro principal: [Tipo, Preço, Status]
@@ -16,43 +16,73 @@ quartos = {
     '104': ['Solteiro', '150.00', 'Ocupado']
 }
 
-# Atribuir uma chave de cliente para gerar o dicionario de regristro. Não tem nada haver com o numero do quarto
+# Atribuir uma chave de cliente para gerar o dicionario de regristro.
 chave = 1003
 
-# Numero de chave como registro principal: [CPF, Num_Quarto, Data_Entrada, Data_Saida(vazio), Consumo(R$), Valor_Total(vazio)]
+# Numero de chave como registro principal: [CPF, Num_Quarto, Data_Entrada, Data_Saida, Consumo, Valor_Total]
 registro = {
     1001: ['22222222222', '102', datetime(2026, 6, 5, 14, 30), '', 45.50, ''],
     1002: ['11111111111', '104', datetime(2026, 6, 7, 9, 15), '', 0.0, '']
 }
 
-# RECUPERAR DADOS
+# ==========================================================
+# FUNÇÕES DO SISTEMA
+# ==========================================================
 
+def salvar_dados():
+    # Função para unificar todos os salvamentos dos arquivos em binario
+    arq_hotel = open('dados_hotel.dat', 'wb')
+    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
+    arq_hotel.close()
+
+def limpar_tela_cabecalho(titulo):
+    # limpar cabeçalho bonitinho
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("============================================")
+    print(f"======       {titulo.upper().center(16)}       ======")
+    print("============================================")
+
+def apenas_numeros(texto):
+    # Verificar telefone
+    if texto == '':
+        return False
+    
+    numeros_validos = '0123456789'
+    for caractere in texto:
+        if caractere not in numeros_validos:
+            return False
+    return True
+
+def validar_cpf(cpf):
+    # verificar cpf
+    if len(cpf) == 11 and apenas_numeros(cpf):
+        return True
+    return False
+
+def validar_email(email):
+   # verificar email
+    if '@' in email and '.com' in email:
+        return True
+    return False
+
+# ==========================================================
+# RECUPERAR DADOS
+# ==========================================================
 try:
-    # 1. Tenta abrir o arquivo para puxar os dados salvos
     arq_hotel = open('dados_hotel.dat', 'rb')
     dados_salvos = pickle.load(arq_hotel)
-    
-    # Se encontrou o arquivo, sobrepõe
     hospedes = dados_salvos[0]
     quartos = dados_salvos[1]
     registro = dados_salvos[2]
     chave = dados_salvos[3]
     arq_hotel.close()
 except:
-    # 2. Se deu erro grava os dados de cima para criar o arquivo novo
-    arq_hotel = open('dados_hotel.dat', 'wb')
-    info_hotel = [hospedes, quartos, registro, chave]
-    pickle.dump(info_hotel, arq_hotel)
-    arq_hotel.close()
+    salvar_dados()
 
 
 resp = ''
 while resp != '0': 
-    os.system('cls' if os.name == 'nt' else 'clear') 
-    
-    print("============================================")
-    print("======       GESTÃO DE HOTEIS         ======")
-    print("============================================")
+    limpar_tela_cabecalho("GESTÃO DE HOTEIS")
     print("----- 1 - Módulo Hóspedes              -----")
     print("----- 2 - Módulo Quartos               -----")
     print("----- 3 - Módulo Hospedagem            -----")
@@ -66,10 +96,7 @@ while resp != '0':
     if resp == '1':
         resp2 = ''
         while resp2 != '0': 
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print("============================================")
-            print("======       Módulo Hóspedes          ======")
-            print("============================================")
+            limpar_tela_cabecalho("Módulo Hóspedes")
             print("----- 1 - Cadastrar Hóspede            -----")
             print("----- 2 - Exibir Dados do Hóspede      -----")
             print("----- 3 - Alterar Dados do Hóspede     -----")
@@ -79,33 +106,36 @@ while resp != '0':
             resp2 = input("===== Escolha sua opção: ")
             
             if resp2 == '1':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======        Cadastrar Hóspede       ======")
-                print("============================================")
-                cpf = input("# CPF (Apenas números): ")
+                limpar_tela_cabecalho("Cadastrar Hóspede")
+                cpf = input("# CPF (Apenas 11 números): ")
                 
-                if cpf in hospedes:
+                # Validação do CPF a partir da função
+                if not validar_cpf(cpf):
+                    print("\n Erro: CPF inválido! Deve conter exatamente 11 dígitos numéricos.")
+                elif cpf in hospedes:
                     print("\n Erro: Este CPF já está cadastrado no sistema!")
                 else:
                     nome = input("# Nome do hóspede: ")
-                    email = input("# Email: ")
-                    numero = input("# Telefone: ")
-                    hospedes[cpf] = [nome, email, numero]
-                    print("\n Hóspede cadastrado com sucesso!")
+                    email = input("# Email (deve conter '@' e '.com'): ")
                     
-                    # [SALVAMENTO AUTOMÁTICO]
-                    arq_hotel = open('dados_hotel.dat', 'wb')
-                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                    arq_hotel.close()
+                    # Validação do Email
+                    if not validar_email(email):
+                        print("\n Erro: Email inválido! O email precisa conter '@' e '.com'.")
+                    else:
+                        numero = input("# Telefone (Apenas números): ")
+                        
+                        # Validar telefone
+                        if not apenas_numeros(numero):
+                            print("\n Erro: O telefone deve conter apenas números!")
+                        else:
+                            hospedes[cpf] = [nome, email, numero]
+                            print("\n Hóspede cadastrado com sucesso!")
+                            salvar_dados()
                         
                 input("\n Tecle <ENTER> para continuar...")
                 
             elif resp2 == '2':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======      Exibir Dados do Hóspede   ======")
-                print("============================================")
+                limpar_tela_cabecalho("Exibir Dados")
                 cpf = input("# Digite o CPF do hóspede para busca: ")
                 
                 if cpf in hospedes:
@@ -118,43 +148,36 @@ while resp != '0':
                 input("\n Tecle <ENTER> para continuar...")
                 
             elif resp2 == '3':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======   Alterar Dados do Hóspede     ======")
-                print("============================================")
+                limpar_tela_cabecalho("Alterar Dados")
                 cpf = input("##### Digite o CPF do hóspede: ")
                 
                 if cpf in hospedes:
                     print(f"\n Alterando os dados de: {hospedes[cpf][0]}")
                     nome = input("# Digite o Nome: ")
                     email = input("# Digite o Email: ")
-                    numero = input("# Digite o Telefone: ")
-                    hospedes[cpf] = [nome, email, numero]
-                    print("\n Dados updated com sucesso!")
                     
-                    # [SALVAMENTO AUTOMÁTICO]
-                    arq_hotel = open('dados_hotel.dat', 'wb')
-                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                    arq_hotel.close()
+                    if not validar_email(email):
+                        print("\n Erro: Email inválido! Não foi alterado.")
+                    else:
+                        numero = input("# Digite o Telefone (Apenas números): ")
+                        if not apenas_numeros(numero):
+                            print("\n Erro: O telefone deve conter apenas números! Não foi alterado.")
+                        else:
+                            hospedes[cpf] = [nome, email, numero]
+                            print("\n Dados atualizados com sucesso!")
+                            salvar_dados()
                 else:
                     print("\n Hóspede não encontrado!")
                 input("\n Tecle <ENTER> para continuar...")
                 
             elif resp2 == '4':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======        Excluir Hóspede         ======")
-                print("============================================")
+                limpar_tela_cabecalho("Excluir Hóspede")
                 cpf = input("# Digite o CPF do hóspede para excluir: ")
                 
                 if cpf in hospedes:
                     del hospedes[cpf] 
                     print("\n Hóspede removido do sistema!")
-                    
-                    # SALVAMENTO AUTOMÁTICO
-                    arq_hotel = open('dados_hotel.dat', 'wb')
-                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                    arq_hotel.close()
+                    salvar_dados()
                 else:
                     print("\n Hóspede não encontrado!")
                 input("\n Tecle <ENTER> para continuar...")
@@ -163,10 +186,7 @@ while resp != '0':
     elif resp == '2':
         resp2 = ''
         while resp2 != '0':
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print("============================================")
-            print("======           Módulo Quartos       ======")
-            print("============================================")
+            limpar_tela_cabecalho("Módulo Quartos")
             print("----- 1 - Cadastrar Novo Quarto        -----")
             print("----- 2 - Acompanhar Disponibilidade   -----")
             print("----- 3 - Alterar Preço da Diária      -----")
@@ -175,10 +195,7 @@ while resp != '0':
             resp2 = input("===== Escolha sua opção: ")
     
             if resp2 == '1':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======     Cadastrar Novo Quarto      ======")
-                print("============================================")
+                limpar_tela_cabecalho("Novo Quarto")
                 num_quarto = input("# Numero do Quarto: ")
                 
                 if num_quarto in quartos:
@@ -189,18 +206,11 @@ while resp != '0':
                     status = input("# Disponibilidade (Disponivel/Indisponivel/Manutencao): ")
                     quartos[num_quarto] = [tipo, preco, status]
                     print("\n Quarto cadastrado com sucesso!")
-                    
-                    # SALVAMENTO AUTOMÁTICO
-                    arq_hotel = open('dados_hotel.dat', 'wb')
-                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                    arq_hotel.close()
+                    salvar_dados()
                 input("\n Tecle <ENTER> para continuar...")
                         
             elif resp2 == '2':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======     Checkando Disponibilidade  ======")
-                print("============================================")
+                limpar_tela_cabecalho("Disponibilidade")
                 num_quarto = input("# Digite o número do quarto para busca: ")
                 
                 if num_quarto in quartos:
@@ -213,10 +223,7 @@ while resp != '0':
                 input("\n Tecle <ENTER> para continuar...")
 
             elif resp2 == '3':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======     Alterar Preço da Diária    ======")
-                print("============================================")
+                limpar_tela_cabecalho("Preço da Diária")
                 num_quarto = input("# Digite o número do quarto: ")
                 
                 if num_quarto in quartos:
@@ -224,12 +231,8 @@ while resp != '0':
                     print(f" Preço atual da diária: R$ {quartos[num_quarto][1]}")
                     novo_preco = input("\n# Digite o NOVO preço da diária: R$ ")
                     quartos[num_quarto][1] = novo_preco
-                    print("\n Preço da diária updated com sucesso!")
-                    
-                    # SALVAMENTO AUTOMÁTICO
-                    arq_hotel = open('dados_hotel.dat', 'wb')
-                    pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                    arq_hotel.close()
+                    print("\n Preço da diária atualizado com sucesso!")
+                    salvar_dados()
                 else:
                     print("\n Quarto não encontrado!")
                 input("\n Tecle <ENTER> para continuar...")
@@ -238,10 +241,7 @@ while resp != '0':
     elif resp == '3':
         resp2 = ''
         while resp2 != '0':
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print("============================================")
-            print("======         Módulo Hospedagem      ======")
-            print("============================================")
+            limpar_tela_cabecalho("Módulo Hospedagem")
             print("----- 1 - Realizar Check-in            -----")
             print("----- 2 - Realizar Check-out           -----")
             print("----- 3 - Registrar Consumo/Serviços   -----")
@@ -250,15 +250,12 @@ while resp != '0':
             resp2 = input("===== Escolha sua opção: ")
             
             if resp2 == '1':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======        Realizar Check-in       ======")
-                print("============================================")
+                limpar_tela_cabecalho("Realizar Check-in")
                 cpf = input("# CPF do Hóspede: ")
                 num_quarto = input("# Número do Quarto: ")
                 
                 if cpf in hospedes and num_quarto in quartos:
-                    if quartos[num_quarto][2] == 'Disponivel':
+                    if quartos[num_quarto][2] in ['Disponivel', 'Disponível']:
                         quartos[num_quarto][2] = 'Ocupado' 
                         
                         data_entrada = datetime.now()
@@ -269,11 +266,7 @@ while resp != '0':
                         print(f" Entrada registrada às: {data_entrada.strftime('%d/%m/%Y %H:%M')}")
                         
                         chave += 1 
-                        
-                        # SALVAMENTO AUTOMÁTICO
-                        arq_hotel = open('dados_hotel.dat', 'wb')
-                        pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                        arq_hotel.close()
+                        salvar_dados()
                     else:
                         print("\n Erro: Esse quarto já está ocupado ou em manutenção.")
                 else:
@@ -281,15 +274,11 @@ while resp != '0':
                 input("\n Tecle <ENTER> para continuar...")
                 
             elif resp2 == '2':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======        Realizar Check-out      ======")
-                print("============================================")
+                limpar_tela_cabecalho("Realizar Check-out")
                 num_quarto = input("# Número do Quarto para fechar conta: ")
                 
                 encontrou = False
                 for chave_antiga, dados in registro.items():
-                    
                     if dados[1] == num_quarto and dados[3] == '':
                         encontrou = True 
                         
@@ -321,11 +310,7 @@ while resp != '0':
                         dados[5] = total_geral
                         
                         print("\n Conta fechada, quarto liberado e histórico salvo com sucesso!")
-                        
-                        # SALVAMENTO AUTOMÁTICO
-                        arq_hotel = open('dados_hotel.dat', 'wb')
-                        pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                        arq_hotel.close()
+                        salvar_dados()
                         break
                 if encontrou == False:
                     print("\n Erro: Quarto não encontrado ou não possui hospedagem ativa!")
@@ -333,10 +318,7 @@ while resp != '0':
                 input("\n Tecle <ENTER> para continuar...") 
                 
             elif resp2 == '3':
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("============================================")
-                print("======  Registrar Consumo/Serviços    ======")
-                print("============================================")
+                limpar_tela_cabecalho("Registrar Consumo")
                 num_quarto = input("# Número do Quarto: ")
                 
                 encontrou = False
@@ -354,11 +336,7 @@ while resp != '0':
                         dados[4] += valor_consumo
                         
                         print(f"\n Consumo registrado! Novo saldo: R$ {dados[4]:.2f}")
-                        
-                        # SALVAMENTO AUTOMÁTICO
-                        arq_hotel = open('dados_hotel.dat', 'wb')
-                        pickle.dump([hospedes, quartos, registro, chave], arq_hotel)
-                        arq_hotel.close()
+                        salvar_dados()
                         break
                 
                 if encontrou == False:
@@ -368,10 +346,7 @@ while resp != '0':
 
     # MÓDULO RELATÓRIOS 
     elif resp == '4':
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("============================================")
-        print("======        Módulo Relatórios       ======")
-        print("============================================")
+        limpar_tela_cabecalho("Módulo Relatórios")
         print("----- 1 - Lista Geral de Hóspedes      -----")
         print("----- 2 - Relatório Financeiro         -----")
         print("----- 0 - Retornar ao Menu Principal   -----")
@@ -379,29 +354,20 @@ while resp != '0':
         resp2 = input("===== Escolha sua opção: ")
         
         if resp2 == '1':
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print("============================================")
-            print("======      Lista Geral de Hóspedes   ======")
-            print("============================================")
+            limpar_tela_cabecalho("Geral de Hóspedes")
             print("##### 1. Maria do Socorro   - CPF: 111.111.111-11")
             print("##### 2. Sansão Toscano  - CPF: 222.222.222-22")
             input("\n Tecle <ENTER> para continuar...")
             
         elif resp2 == '2':
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print("============================================")
-            print("======      Relatório Financeiro      ======")
-            print("============================================")
+            limpar_tela_cabecalho("Relatório Financeiro")
             print("# Taxa de Ocupação Atual: 65%")
             print("# Faturamento Estimado do Mês: R$ 12.450,00")
             input("\n Tecle <ENTER> para continuar...")
 
     # MÓDULO INFORMAÇÕES
     elif resp == '5':
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("============================================")
-        print("======            Informações         ======")
-        print("============================================")
+        limpar_tela_cabecalho("Informações")
         print("# Sistema de Gestão para Hotéis e Pousadas")
         print("# Desenvolvido para a Disciplina de Algorítmos e Lógica de Programação, sob orientação do Professor Flavius Gorgônio")
         print("# UFRN 2026")
